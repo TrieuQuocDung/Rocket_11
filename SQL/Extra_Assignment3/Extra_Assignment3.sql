@@ -28,7 +28,7 @@
     (SELECT 		P.`Name`, P.ListPrice
 	FROM			product	P									
 	WHERE			P.ProductSubcategoryID =3)
--- nhóm giá lại và lấy min 
+--  lấy min 
     SELECT		`Name`
     FROM		PSC3
 	WHERE	 	ListPrice  = (SELECT	MIN(ListPrice)
@@ -57,3 +57,8 @@
 -- Question 3:SalesOrderID, OrderDate and SalesPersonID. Từ bảng SalesPerson, chúng ta lấy cột 
 -- BusinessEntityID (là định danh của người sales), Bonus and the SalesYTD (là đã sale 
 -- được bao nhiêu người trong năm nay)
+	
+	SELECT  SalesPersonID , Bonus ,SalesYTD, SalesOrderID,OrderDate
+    FROM 	salesperson sp 
+    
+

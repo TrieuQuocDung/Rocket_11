@@ -163,9 +163,9 @@ VALUES								(   	'Java'				),
 -- Chèn Data bảng 8: question
 USE testing_system;
 INSERT INTO  question  	(content	            			 		,	category_id	,	type_id	,	creator_id	,	create_date )
-VALUES					('Bạn biết gì về SQL?'	 			 		,  		'1'		,	  '2'   ,		'7'		,	'2020-04-01'	),
-						( 'Hoa nở không màu của ca sĩ nào?'  		,		'2'		,	  '3'   ,		'9'		,	'2020-05-02'	),
-						('Kể tên 5 con vật yêu thích?'   	 		,		'4'		,	  '1'   ,		'10'	,	'2020-05-04'	),
+VALUES					('Bạn biết gì về SQL?'	 			 		,  		'1'		,	  '2'   ,		'7'		,	'2020-03-01'	),
+						( 'Hoa nở không màu của ca sĩ nào?'  		,		'2'		,	  '3'   ,		'9'		,	'2020-03-02'	),
+						('Kể tên 5 con vật yêu thích?'   	 		,		'4'		,	  '1'   ,		'10'	,	'2020-03-04'	),
 						('Bộ phim bom tấn đoạt giải Ocscar 2019?'	,		'3'		,	  '5'   ,		'6'		,	'2020-05-07'	),
 						('Fanpage Đảo chó ai là Admin?'				,		'5'		,	  '4'   ,		'8'		,	'2020-05-09'	);
 -- Chèn Data bảng 9: answer
