@@ -37,11 +37,13 @@ CREATE TABLE `group`
             FOREIGN KEY(creator_id) REFERENCES `account` (account_id)
 );
 -- create table 5: group_account
+DROP TABLE IF EXISTS `group_account`;
 CREATE TABLE `group_account`
 (		
-			group_id 	    TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+			group_id 	    TINYINT UNSIGNED AUTO_INCREMENT,
             account_id		TINYINT UNSIGNED,
             Join_date		DATE ,
+            PRIMARY KEY(group_id,account_id),
 			FOREIGN KEY(group_id) REFERENCES `group` (group_id),
             FOREIGN KEY(account_id) REFERENCES `group` (creator_id)
 );

@@ -36,9 +36,10 @@
 	CREATE PROCEDURE countTypeQuestionOfMonth()
 	BEGIN
 	
-		SELECT		COUNT(type_id)
-		FROM		question
-		WHERE		MONTH(create_date) = Month(NOW());
+		SELECT		* ,COUNT(Q.type_id)
+		FROM		testing_system.question	Q
+        JOIN 		type_question TQ ON Q.type_id = TQ.type_id
+		WHERE		MONTH(Q.create_date) = Month(NOW()) AND YEAR(Q.create_date) = YEAR(NOW());
 		
 	END$$
 	DELIMITER ;
@@ -103,9 +104,70 @@ SELECT FindDepartment('1');
 -- chứa chuỗi của người dùng nhập vào hoặc trả về user có username chứa 
 -- chuỗi của người dùng nhập vào 
 
+-- Trigger
+	INSERT INTO  question  	(	content	            			 		,	category_id	,	type_id	,	creator_id	,	create_date )
+		VALUES					('Bạn biết gì về SQL3?'	 			 		,  		'1'		,	  '2'   ,		'7'		,	'2021-06-01'	);
+        
+DROP TRIGGER IF EXISTS trigger_create_date_question;
+DELIMITER $$
+CREATE TRIGGER trigger_create_date_question
+BEFORE INSERT ON question
+FOR EACH ROW
+BEGIN
+	-- logic
+    IF NEW.create_date > NOW()  THEN
+    SIGNAL SQLSTATE '12345'
+    SET MESSAGE_TEXT ='create không được lớn hơn thời gian hiện tại';
+     END IF;
+END$$
+DELIMITER ;
+		
+-- BEFORE
+DELETE FROM question
+WHERE question_id = 2;
+
+DROP TRIGGER IF EXISTS trigger_delete_question;
+DELIMITER $$
+CREATE TRIGGER trigger_delete_question
+BEFORE DELETE ON question
+FOR EACH ROW
+BEGIN
+	-- logic
+    DELETE FROM answer 
+    WHERE question_id = OLD.question_id;
+    DELETE FROM exam_question
+    WHERE question_id = OLD.question_id;
+END$$
+DELIMITER ;
+
+-- Question 3: Cấu hình 1 group có nhiều nhất là 5 user
+
+	INSERT INTO `group_account` (group_id		,account_id		,	Join_date)
+	VALUES						('6'	 		,'6'			,	'2021-01-01'),
+								('6'	 		,'7'			,	'2021-01-01'),
+                                ('6'	 		,'8'			,	'2021-01-01');
+                              
     
-   
-    
+
+
+DROP TRIGGER IF EXISTS trigger_Max_account;
+DELIMITER $$
+CREATE TRIGGER trigger_Max_account
+BEFORE INSERT ON group_account
+FOR EACH ROW
+BEGIN
+	DECLARE 	out_count_user TINYINT;
+    SELECT		COUNT(GA.account_id) INTO out_count_user
+    FROM 		group_account GA
+   WHERE		group_id = NEW.group_id;
+    IF   		out_count_user > 2 THEN
+    SIGNAL SQLSTATE '12345'
+    SET MESSAGE_TEXT='Không được chèn quá 2 account trong 1 group';
+    END IF;
+END$$
+DELIMITER ;
+
+
     
 
 	
