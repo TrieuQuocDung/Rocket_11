@@ -12,7 +12,7 @@ CREATE TABLE  country
 DROP TABLE IF EXISTS Location;
 CREATE TABLE  Location
 (
-			location_id 	 	TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY ON,
+			location_id 	 	TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             street_address		VARCHAR(100) NOT NULL,
             postal_code			VARCHAR(10) NOT NULL,
             country_id    		TINYINT UNSIGNED NOT NULL,
@@ -46,7 +46,7 @@ VALUES 				( '18 Lac Trung'	,	'VN003'		,		1	),
 
 -- Chèn Data bảng 3: Employee
 
-INSERT INTO Employee (fullname			, 		email				, location_id) 
+INSERT INTO Employee (   fullname		, 		email				, location_id) 
 VALUES 				( 	'Ngoc Ngan'		,	'nn03@gmail.com'		,		1	),
 					('	Back School	'	,	'backscholl@gmail.com'	,		2	),
                     ('	Elsa David'		,	'elsadavid@gmail.com'	,		3	),
@@ -82,11 +82,11 @@ VALUES 				( 	'Ngoc Ngan'		,	'nn03@gmail.com'		,		1	),
 -- 3 Tạo trigger cho table Employee chỉ cho phép insert mỗi quốc gia có tối đa
 -- 10 employee
 
-INSERT INTO Employee (   fullname		, 		email					, location_id	) 
-VALUES 				('Ashton Boase'		, 'aboase0@elpais.com'			,		1	 	),
-					('Bealle Hannaby'	, 'bhannaby1@mediafire.com'		,		1	 	),
-					('Natalya Lowdham'	, 'nlowdham2@howstuffworks.com'	,		1	 	);
-					
+INSERT INTO Employee (   fullname	, 		email			, location_id) 
+VALUES 				( 	'Ngoc Bui '	,	'nn@gmail.com'		,		1	),
+					('	Back 	'	,	'backoll@gmail.com'	,		1	),
+                    ('	Elsa '		,	'elsid@gmail.com'	,		1	),
+                    ('	Singed '	,	'Oa@gmail.com'		,		1	);					
     
     DROP TRIGGER IF EXISTS Trigger_Max_Employee_in_country;
     DELIMITER $$
@@ -94,15 +94,29 @@ VALUES 				('Ashton Boase'		, 'aboase0@elpais.com'			,		1	 	),
     BEFORE INSERT ON Employee
 	FOR EACH ROW
 		BEGIN
-			IF
-				(SELECT 	 	c.country_name,COUNT(e.employee_id) 
-				FROM 		country c
-				JOIN 		Location l ON c.country_id = l.country_id
-				JOIN		Employee e ON l.location_id	= e.location_id
-                GROUP BY 	e.employee_id
-				HAVING		COUNT(e.employee_id) > 3 ) THEN
-				SIGNAL SQLSTATE '12345'
-				SET MESSAGE_TEXT ='insert up to 3 employees';
+			DECLARE in_country_id TINYINT;
+            DECLARE	employee_amount TINYINT;
+            
+            SELECT country_id INTO in_country_id
+            FROM	Location
+            WHERE	location_id = NEW.location_id;
+            
+            WITH    LocationCTE	AS(
+            SELECT  location_id
+            FROM	Location
+            WHERE	country_id = in_country_id
+            )
+            SELECT  COUNT(1)	INTO employee_amount
+            FROM 	Employee
+            WHERE	location_id IN(
+									SELECT location_id
+                                    FROM	LocationCTE
+                                    );
+            
+            
+			IF employee_amout	>= 3	THEN			
+            SIGNAL SQLSTATE '12345'
+			SET MESSAGE_TEXT ='insert up to 3 employees';
 			END IF;
         END$$
     DELIMITER ;
