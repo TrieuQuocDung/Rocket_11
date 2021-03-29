@@ -6,9 +6,6 @@ public class Student {
 	private String hometown;
 	private float point;
 	
-	public Student() {
-		
-	}
 	Student(int id,String name , String hometown){
 		this.id=id;
 		this.name=name;

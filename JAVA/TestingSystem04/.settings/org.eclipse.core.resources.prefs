@@ -1,3 +1,15 @@
 eclipse.preferences.version=1
+encoding//src/com/vti/acedamy/backend/Abstraction.java=UTF-8
+encoding//src/com/vti/acedamy/backend/QLCB.java=UTF-8
+encoding//src/com/vti/acedamy/backend/QLHS.java=UTF-8
 encoding//src/com/vti/acedamy/backend/setPoints.java=UTF-8
+encoding//src/com/vti/acedamy/entity/HighSchoolStudent.java=UTF-8
+encoding//src/com/vti/acedamy/entity/Phone.java=UTF-8
+encoding//src/com/vti/acedamy/entity/canBo.java=UTF-8
+encoding//src/com/vti/acedamy/entity/congNhan.java=UTF-8
+encoding//src/com/vti/acedamy/entity/kySu.java=UTF-8
+encoding//src/com/vti/acedamy/entity/nhanVien.java=UTF-8
+encoding//src/com/vti/acedamy/frontend/AbstractionProgram.java=UTF-8
 encoding//src/com/vti/acedamy/frontend/Program1.java=UTF-8
+encoding//src/com/vti/acedamy/frontend/Question2.java=UTF-8
+encoding//src/com/vti/acedamy/frontend/Question3.java=UTF-8
