@@ -52,79 +52,7 @@ VALUES 				( 	'Ngoc Ngan'		,	'nn03@gmail.com'		,		1	),
                     ('	Elsa David'		,	'elsadavid@gmail.com'	,		3	),
                     ('	Singed Obama'	,	'Obama@gmail.com'		,		4	);
                     
--- --------------------------------------------Questions--------------------------
--- 2:a) Lấy tất cả các nhân viên thuộc Việt nam
-	
-	SELECT 	e.fullname
-    FROM	Employee e
-    JOIN 	Location L ON e.location_id = L.location_id
-    JOIN	country	c  ON L.country_id	= c.country_id
-    WHERE	country_name = 'Viet Nam';
     
--- 2:b) Lấy ra tên quốc gia của employee có email là "nn03@gmail.com"
-	
-	SELECT 	c.country_name
-    FROM	country c
-    JOIN 	Location L ON c.country_id = L.country_id
-    JOIN	Employee e ON L.location_id	= e.location_id
-    WHERE	e.email = 'nn03@gmail.com';
-    
--- 2:c) Thống kê mỗi country, mỗi location có bao nhiêu employee đang
--- làm việc.
-	SELECT		c.country_name, l.street_address, 
-				COUNT(e.employee_id) AS Count_employee_online
-    FROM		Employee e
-	JOIN 		Location l ON e.location_id = l.location_id
-    JOIN		country  c ON l.country_id	= c.country_id
-	GROUP BY	e.employee_id
-	ORDER BY	e.employee_id ASC;
-    
--- 3 Tạo trigger cho table Employee chỉ cho phép insert mỗi quốc gia có tối đa
--- 10 employee
-
-INSERT INTO Employee (   fullname	, 		email			, location_id) 
-VALUES 				( 	'Ngoc Bui '	,	'nn@gmail.com'		,		1	),
-					('	Back 	'	,	'backoll@gmail.com'	,		1	),
-                    ('	Elsa '		,	'elsid@gmail.com'	,		1	),
-                    ('	Singed '	,	'Oa@gmail.com'		,		1	);					
-    
-    DROP TRIGGER IF EXISTS Trigger_Max_Employee_in_country;
-    DELIMITER $$
-    CREATE TRIGGER Trigger_Max_Employee_in_country
-    BEFORE INSERT ON Employee
-	FOR EACH ROW
-		BEGIN
-			DECLARE in_country_id TINYINT;
-            DECLARE	employee_amount TINYINT;
-            
-            SELECT country_id INTO in_country_id
-            FROM	Location
-            WHERE	location_id = NEW.location_id;
-            
-            WITH    LocationCTE	AS(
-            SELECT  location_id
-            FROM	Location
-            WHERE	country_id = in_country_id
-            )
-            SELECT  COUNT(1)	INTO employee_amount
-            FROM 	Employee
-            WHERE	location_id IN(
-									SELECT location_id
-                                    FROM	LocationCTE
-                                    );
-            
-            
-			IF employee_amout	>= 3	THEN			
-            SIGNAL SQLSTATE '12345'
-			SET MESSAGE_TEXT ='insert up to 3 employees';
-			END IF;
-        END$$
-    DELIMITER ;
-    
-    -- 4 Hãy cấu hình table sao cho khi xóa 1 location nào đó thì tất cả employee ở
-	-- location đó sẽ có location_id = null
-    
-
     
 		
 
